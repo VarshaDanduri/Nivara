@@ -1,0 +1,1 @@
+Contains the Keras model trained on a 12,000+ dataset of skin-images. 
