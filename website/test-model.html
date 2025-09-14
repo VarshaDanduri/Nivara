@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Test - Nivara</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.8/dist/tf-tflite.min.js"></script>
+</head>
+<body>
+    <h1>TensorFlow Lite Model Test - Nivara</h1>
+    <div id="status">Loading...</div>
+    <div id="results"></div>
+
+    <script>
+        async function testModel() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            try {
+                // Check if libraries are loaded
+                statusDiv.innerHTML = 'Checking libraries...';
+                
+                if (typeof tf === 'undefined') {
+                    throw new Error('TensorFlow.js not loaded');
+                }
+                
+                if (typeof tflite === 'undefined') {
+                    throw new Error('TensorFlow Lite library not loaded');
+                }
+                
+                statusDiv.innerHTML = 'Libraries loaded successfully!<br>Attempting to load model...';
+                
+                // Try to load the model
+                const modelPaths = [
+                    './model/trainedSkinmodel.tflite',
+                    'model/trainedSkinmodel.tflite',
+                    '../model/trainedSkinmodel.tflite'
+                ];
+                
+                let modelLoaded = false;
+                let loadedPath = '';
+                
+                for (const path of modelPaths) {
+                    try {
+                        console.log(`Trying to load model from: ${path}`);
+                        const model = await tflite.loadTFLiteModel(path);
+                        console.log('Model loaded successfully from:', path);
+                        modelLoaded = true;
+                        loadedPath = path;
+                        break;
+                    } catch (pathError) {
+                        console.warn(`Failed to load from ${path}:`, pathError.message);
+                    }
+                }
+                
+                if (modelLoaded) {
+                    statusDiv.innerHTML = `✅ Model loaded successfully from: ${loadedPath}`;
+                    resultsDiv.innerHTML = `
+                        <h3>Model Information:</h3>
+                        <p><strong>Status:</strong> Loaded</p>
+                        <p><strong>Path:</strong> ${loadedPath}</p>
+                        <p><strong>Type:</strong> TensorFlow Lite Model</p>
+                    `;
+                } else {
+                    throw new Error('Could not load model from any path');
+                }
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                statusDiv.innerHTML = `❌ Error: ${error.message}`;
+                resultsDiv.innerHTML = `
+                    <h3>Debug Information:</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>TensorFlow.js:</strong> ${typeof tf !== 'undefined' ? '✅ Loaded' : '❌ Not loaded'}</p>
+                    <p><strong>TensorFlow Lite:</strong> ${typeof tflite !== 'undefined' ? '✅ Loaded' : '❌ Not loaded'}</p>
+                    <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+                `;
+            }
+        }
+        
+        // Run test when page loads
+        window.addEventListener('load', testModel);
+    </script>
+</body>
+</html>

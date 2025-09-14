@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analysis Camera - Nivara</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.8/dist/tf-tflite.min.js"></script>
+    <script>
+        // Check if TensorFlow Lite is loaded
+        window.addEventListener('load', function() {
+            if (typeof tflite === 'undefined') {
+                console.error('TensorFlow Lite library failed to load');
+                alert('TensorFlow Lite library failed to load. Please refresh the page.');
+            } else {
+                console.log('TensorFlow Lite library loaded successfully');
+            }
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🌸</div>
+                <span class="logo-text">Nivara</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="mission.html" class="nav-link">Mission</a></li>
+                <li><a href="mission-statement.html" class="nav-link">Mission Statement</a></li>
+                <li><a href="camera.html" class="nav-link active">Skin Analysis</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section class="camera-hero">
+            <div class="container">
+                <h1 class="page-title">Skin Analysis Camera</h1>
+                <p class="page-subtitle">Take a photo of your skin to get personalized skincare recommendations</p>
+            </div>
+        </section>
+
+        <section class="camera-section">
+            <div class="container">
+                <div class="camera-container">
+                    <div class="camera-wrapper">
+                        <video id="video" autoplay muted playsinline></video>
+                        <canvas id="canvas" style="display: none;"></canvas>
+                        <div class="camera-overlay">
+                            <div class="orientation-guide">
+                                <p class="guide-text">Position at 3/4 angle</p>
+                                <p class="guide-subtext">Turn your head slightly to capture blemishes</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="camera-controls">
+                        <button id="startCamera" class="btn-primary camera-btn">
+                            <span class="btn-icon">📷</span>
+                            Start Camera
+                        </button>
+                        <button id="capturePhoto" class="btn-secondary camera-btn" disabled>
+                            <span class="btn-icon">📸</span>
+                            Capture Photo
+                        </button>
+                        <button id="retakePhoto" class="btn-secondary camera-btn" style="display: none;">
+                            <span class="btn-icon">🔄</span>
+                            Retake
+                        </button>
+                        <button id="analyzePhoto" class="btn-primary camera-btn" style="display: none;">
+                            <span class="btn-icon">🔍</span>
+                            Analyze Skin
+                        </button>
+                    </div>
+                </div>
+
+                <div class="photo-preview" id="photoPreview" style="display: none;">
+                    <h3>Captured Photo</h3>
+                    <img id="capturedImage" alt="Captured skin photo">
+                    <div class="analysis-results" id="analysisResults" style="display: none;">
+                        <h4>Analysis Results</h4>
+                        <div class="skin-conditions">
+                            <div class="condition-item">
+                                <span class="condition-label">Predicted Condition:</span>
+                                <span class="condition-value" id="predictedCondition">Analyzing...</span>
+                            </div>
+                            <div class="condition-item">
+                                <span class="condition-label">Confidence Score:</span>
+                                <span class="condition-value" id="confidenceScore">Analyzing...</span>
+                            </div>
+                            <div class="condition-item">
+                                <span class="condition-label">All Predictions:</span>
+                                <div class="condition-value" id="allPredictions">Analyzing...</div>
+                            </div>
+                            <div class="condition-item">
+                                <span class="condition-label">Recommendations:</span>
+                                <span class="condition-value" id="recommendations">Analyzing...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>Tips for Best Results</h3>
+                    <div class="tips-grid">
+                        <div class="tip-item">
+                            <div class="tip-icon">💡</div>
+                            <h4>Good Lighting</h4>
+                            <p>Use natural lighting or bright, even lighting for best results</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">🧴</div>
+                            <h4>Clean Skin</h4>
+                            <p>Remove makeup and ensure your skin is clean and dry</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">📐</div>
+                            <h4>Positioning</h4>
+                            <p>Keep your face centered and at a comfortable distance</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">😌</div>
+                            <h4>Relaxed Expression</h4>
+                            <p>Keep a neutral, relaxed facial expression</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Nivara. Nurturing beauty through pregnancy.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
